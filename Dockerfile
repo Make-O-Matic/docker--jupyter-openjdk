@@ -27,6 +27,8 @@ USER root
 #
 # OPENJDK START
 #
+# Don't forget to comment out FROM statement below when updating openjdk.
+#
 # https://raw.githubusercontent.com/docker-library/openjdk/master/8-jdk/Dockerfile
 
 #
@@ -35,16 +37,7 @@ USER root
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-# A few problems with compiling Java from source:
-#  1. Oracle.  Licensing prevents us from redistributing the official JDK.
-#  2. Compiling OpenJDK also requires the JDK to be installed, and it gets
-#
-# NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
-#
-# PLEASE DO NOT EDIT IT DIRECTLY.
-#
-
-FROM buildpack-deps:stretch-scm
+# FROM buildpack-deps:stretch-scm
 
 # A few reasons for installing distribution-provided OpenJDK:
 #
@@ -116,11 +109,8 @@ RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
 #
 #   https://github.com/docker-library/openjdk/issues
 
-
-
 #
 # OPENJDK END
 #
-
 
 USER $NB_USER
