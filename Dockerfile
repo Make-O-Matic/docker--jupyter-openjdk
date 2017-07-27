@@ -27,9 +27,11 @@ USER root
 #
 # OPENJDK START
 #
-# Don't forget to comment out FROM statement below when updating openjdk.
+# Don't forget to comment FROM statement below when updating openjdk.
 #
 # https://raw.githubusercontent.com/docker-library/openjdk/master/8-jdk/Dockerfile
+# https://raw.githubusercontent.com/docker-library/openjdk/b4f29ba829765552239bd18f272fcdaf09eca259/8-jdk/Dockerfile
+
 
 #
 # NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
@@ -72,8 +74,8 @@ RUN { \
 RUN ln -svT "/usr/lib/jvm/java-8-openjdk-$(dpkg --print-architecture)" /docker-java-home
 ENV JAVA_HOME /docker-java-home
 
-ENV JAVA_VERSION 8u141
-ENV JAVA_DEBIAN_VERSION 8u141-b15-1~deb9u1
+ENV JAVA_VERSION 8u131
+ENV JAVA_DEBIAN_VERSION 8u131-b11-2
 
 # see https://bugs.debian.org/775775
 # and https://github.com/docker-library/java/issues/19#issuecomment-70546872
@@ -108,6 +110,7 @@ RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
 # improved, please open an issue or a pull request so we can discuss it!
 #
 #   https://github.com/docker-library/openjdk/issues
+
 
 #
 # OPENJDK END
