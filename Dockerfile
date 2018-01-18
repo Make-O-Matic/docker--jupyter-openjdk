@@ -146,6 +146,7 @@ RUN { \
 	&& chmod +x /usr/local/bin/docker-java-home
 
 # do some fancy footwork to create a JAVA_HOME that's cross-architecture-safe
+RUN rm -r /docker-java-home
 RUN ln -svT "/usr/lib/jvm/java-8-openjdk-$(dpkg --print-architecture)" /docker-java-home
 ENV JAVA_HOME /docker-java-home
 
