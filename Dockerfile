@@ -1,4 +1,6 @@
-# Copyright (c) 2016-2017 Enproduktion GmbH & Laber's Lab e.U. (FN 394440i, Austria)
+# Copyright (c) 2016-2018 aykit - Verein zur Förderung von Kunst, Kultur,
+# Wissenschaft und Kommunikation & Enproduktion GmbH & Laber's Lab e.U.
+# (FN 394440i, Austria)
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
 FROM jupyter/scipy-notebook
 
 MAINTAINER Make-O-Matic <hello@make-o-matic.io>
@@ -30,8 +33,6 @@ USER root
 # Don't forget to comment FROM statement below when updating openjdk.
 #
 # https://raw.githubusercontent.com/docker-library/openjdk/master/8-jdk/Dockerfile
-# https://raw.githubusercontent.com/docker-library/openjdk/b4f29ba829765552239bd18f272fcdaf09eca259/8-jdk/Dockerfile
-
 
 #
 # NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
@@ -39,20 +40,23 @@ USER root
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-# FROM buildpack-deps:jessie-scm
+# FROM buildpack-deps:stretch-scm
 
-# A few problems with compiling Java from source:
+# A few reasons for installing distribution-provided OpenJDK:
+#
 #  1. Oracle.  Licensing prevents us from redistributing the official JDK.
+#
 #  2. Compiling OpenJDK also requires the JDK to be installed, and it gets
-#       really hairy.
+#     really hairy.
+#
+#     For some sample build times, see Debian's buildd logs:
+#       https://buildd.debian.org/status/logs.php?pkg=openjdk-8
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		bzip2 \
 		unzip \
 		xz-utils \
 	&& rm -rf /var/lib/apt/lists/*
-
-RUN echo 'deb http://deb.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/jessie-backports.list
 
 # Default to UTF-8 file.encoding
 ENV LANG C.UTF-8
@@ -71,14 +75,19 @@ RUN { \
 RUN ln -svT "/usr/lib/jvm/java-8-openjdk-$(dpkg --print-architecture)" /docker-java-home
 ENV JAVA_HOME /docker-java-home
 
-ENV JAVA_VERSION 8u131
-ENV JAVA_DEBIAN_VERSION 8u131-b11-1~bpo8+1
+ENV JAVA_VERSION 8u151
+ENV JAVA_DEBIAN_VERSION 8u151-b12-1~deb9u1
 
 # see https://bugs.debian.org/775775
 # and https://github.com/docker-library/java/issues/19#issuecomment-70546872
-ENV CA_CERTIFICATES_JAVA_VERSION 20161107~bpo8+1
+ENV CA_CERTIFICATES_JAVA_VERSION 20170531+nmu1
 
 RUN set -ex; \
+	\
+# deal with slim variants not having man page directories (which causes "update-alternatives" to fail)
+	if [ ! -d /usr/share/man/man1 ]; then \
+		mkdir -p /usr/share/man/man1; \
+	fi; \
 	\
 	apt-get update; \
 	apt-get install -y \
@@ -99,7 +108,9 @@ RUN set -ex; \
 RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
 # If you're reading this and have any feedback on how this image could be
-#   improved, please open an issue or a pull request so we can discuss it!
+# improved, please open an issue or a pull request so we can discuss it!
+#
+#   https://github.com/docker-library/openjdk/issues
 
 
 #
